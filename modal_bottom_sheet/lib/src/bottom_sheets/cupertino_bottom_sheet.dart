@@ -292,12 +292,18 @@ class _CupertinoModalTransition extends StatelessWidget {
                     data: CupertinoUserInterfaceLevelData.elevated,
                     child: Builder(
                       builder: (context) => CupertinoTheme(
-                        data: curvedAnimation.value > 0
-                            ? createPreviousRouteTheme(
-                                context,
-                                curvedAnimation,
-                              )
-                            : CupertinoTheme.of(context),
+                        data: createPreviousRouteTheme(
+                          context,
+                          curvedAnimation,
+                        ).copyWith(
+                          brightness: CupertinoTheme.of(context).brightness,
+                          primaryColor: CupertinoTheme.of(context).primaryColor,
+                          primaryContrastingColor: CupertinoTheme.of(context).primaryContrastingColor,
+                          textTheme: CupertinoTheme.of(context).textTheme,
+                          barBackgroundColor: CupertinoTheme.of(context).barBackgroundColor,
+                          scaffoldBackgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
+                          applyThemeToAll: CupertinoTheme.of(context).applyThemeToAll,
+                        ),
                         child: CupertinoUserInterfaceLevel(
                           data: CupertinoUserInterfaceLevelData.base,
                           child: child!,
