@@ -426,6 +426,7 @@ class CupertinoScaffold extends StatefulWidget {
 
   static Future<T?> showCupertinoModalBottomSheet<T>({
     required BuildContext context,
+    BuildContext? navigatorContext,
     double? closeProgressThreshold,
     required WidgetBuilder builder,
     Curve? animationCurve,
@@ -455,7 +456,8 @@ class CupertinoScaffold extends StatefulWidget {
     final topRadius = CupertinoScaffold.of(context)!.topRadius;
     final transitionBackgroundColor = CupertinoScaffold.of(context)!.transitionBackgroundColor;
     final overlayStyle = overlayStyleFromColor(transitionBackgroundColor);
-    final result = await Navigator.of(context, rootNavigator: useRootNavigator).push(CupertinoModalBottomSheetRoute<T>(
+    final result = await Navigator.of(navigatorContext ?? context, rootNavigator: useRootNavigator)
+        .push(CupertinoModalBottomSheetRoute<T>(
       closeProgressThreshold: closeProgressThreshold,
       builder: builder,
       secondAnimationController: CupertinoScaffold.of(context)!.animation,
