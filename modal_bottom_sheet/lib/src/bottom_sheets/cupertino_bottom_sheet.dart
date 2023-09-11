@@ -403,8 +403,6 @@ class CupertinoScaffoldInheirted extends InheritedWidget {
   }
 }
 
-final cupertinoScaffoldKey = GlobalKey<CupertinoScaffoldState>();
-
 // Support
 class CupertinoScaffold extends StatefulWidget {
   static CupertinoScaffoldInheirted? of(BuildContext context) =>
@@ -415,17 +413,18 @@ class CupertinoScaffold extends StatefulWidget {
   final Color transitionBackgroundColor;
   final SystemUiOverlayStyle? overlayStyle;
 
-  CupertinoScaffold({
+  const CupertinoScaffold({
+    Key? key,
     required this.body,
     this.topRadius = _kDefaultTopRadius,
     this.transitionBackgroundColor = Colors.black,
     this.overlayStyle,
-  }) : super(key: cupertinoScaffoldKey);
+  }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => CupertinoScaffoldState();
+  State<StatefulWidget> createState() => _CupertinoScaffoldState();
 
-  Future<T?> showCupertinoModalBottomSheet<T>({
+  static Future<T?> showCupertinoModalBottomSheet<T>({
     required BuildContext context,
     double? closeProgressThreshold,
     required WidgetBuilder builder,
@@ -453,13 +452,13 @@ class CupertinoScaffold extends StatefulWidget {
       assert(debugCheckHasMaterialLocalizations(context));
       barrierLabel = MaterialLocalizations.of(context).modalBarrierDismissLabel;
     }
-    final topRadius = this.topRadius;
-    final transitionBackgroundColor = this.transitionBackgroundColor;
+    final topRadius = CupertinoScaffold.of(context)!.topRadius;
+    final transitionBackgroundColor = CupertinoScaffold.of(context)!.transitionBackgroundColor;
     final overlayStyle = overlayStyleFromColor(transitionBackgroundColor);
     final result = await Navigator.of(context, rootNavigator: useRootNavigator).push(CupertinoModalBottomSheetRoute<T>(
       closeProgressThreshold: closeProgressThreshold,
       builder: builder,
-      secondAnimationController: cupertinoScaffoldKey.currentState!.animationController,
+      secondAnimationController: CupertinoScaffold.of(context)!.animation,
       containerBuilder: (context, _, child) => _CupertinoBottomSheetContainer(
         child: child,
         backgroundColor: backgroundColor,
@@ -483,7 +482,7 @@ class CupertinoScaffold extends StatefulWidget {
   }
 }
 
-class CupertinoScaffoldState extends State<CupertinoScaffold> with TickerProviderStateMixin {
+class _CupertinoScaffoldState extends State<CupertinoScaffold> with TickerProviderStateMixin {
   late AnimationController animationController;
 
   @override
